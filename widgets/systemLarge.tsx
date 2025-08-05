@@ -135,7 +135,7 @@ export async function Present() {
                             const minTemp = min.toFixed(0) + unit;
                             const maxTemp = max.toFixed(0) + unit;
 
-                            const totalWidth = 138;
+                            const totalWidth = 120;
                             let offsetX = totalWidth * ((min - globalMin) / length);
                             let barWidth = totalWidth * ((max - min) / length);
 
@@ -145,6 +145,7 @@ export async function Present() {
 
                             const fontSize = 15;
                             const iconSize = 21;
+                            const barHeight = 4;
                             return (
                                 <HStack key={index}>
                                     <Text
@@ -174,14 +175,14 @@ export async function Present() {
                                         {minTemp}
                                     </Text>
                                     <Capsule
-                                        frame={{ width: totalWidth, height: 4 }}
+                                        frame={{ width: totalWidth, height: barHeight }}
                                         fill={"rgba(0,0,0,0.2)"}
                                         opacity={0.5}
                                         overlay={{
                                             alignment: "leading",
                                             content: (
                                                 <Rectangle
-                                                    frame={{ width: totalWidth, height: 4 }}
+                                                    frame={{ width: totalWidth, height: barHeight }}
                                                     fill={gradient("linear", {
                                                         colors: [yellow, red],
                                                         startPoint: "leading",
