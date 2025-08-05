@@ -1,0 +1,219 @@
+import {
+    Widget,
+    Divider,
+    Text,
+    Image,
+    HStack,
+    VStack,
+    Spacer,
+    Capsule,
+    gradient,
+    Rectangle,
+} from "scripting";
+import { fetchColorfulClouds, getLocation } from "../utils/colorfulclouds";
+import { shadowStyle, getBackgroundColor, DeviderColor } from "../utils/color";
+import {
+    TitleView_Large,
+    HourlyView,
+    weatherMap,
+    RainingView_Middle,
+    RainingView_Description_Large,
+} from "../utils/component";
+
+export async function Present() {
+    const { latitude, longitude } = await getLocation();
+    const { result } = await fetchColorfulClouds(latitude, longitude);
+    const unit = "°";
+
+    const isAlert = result?.alert?.content?.length > 0;
+    const currentWeather: keyof typeof weatherMap = result?.realtime?.skycon;
+    const precipitation = result?.minutely?.precipitation;
+    const isPrecipitation = precipitation?.some((value: number) => value !== 0) ?? false;
+
+    // --- Style --- //
+    let background = getBackgroundColor(currentWeather);
+
+    const currentTemperature = result?.realtime?.temperature.toFixed(0) + unit;
+    const maxTemperature = result?.daily?.temperature[0]?.max.toFixed(0) + unit;
+    const minTemperature = result?.daily?.temperature[0]?.min.toFixed(0) + unit;
+
+    const adcodes = result.alert.adcodes;
+    const location = adcodes[adcodes.length - 1];
+
+    const red = "#FF6729";
+    const yellow = "#FC9F19";
+
+    return Widget.present(
+        <VStack padding background={background} alignment={"leading"}>
+            {/* Title */}
+            <TitleView_Large
+                weatherIcon={weatherMap[currentWeather].icon}
+                weatherName={weatherMap[currentWeather].text}
+                maxTemperature={maxTemperature}
+                minTemperature={minTemperature}
+                location={location.name}
+                isCurrentLocation={true}
+                temperature={currentTemperature}
+            />
+            <Spacer />
+            {/* Raining View */}
+            {isPrecipitation ? (
+                <>
+                    <RainingView_Middle data={precipitation} />
+                    <Spacer />
+                    <RainingView_Description_Large content={result.minutely.description} />
+                </>
+            ) : null}
+            <Divider overlay={<Rectangle fill={DeviderColor} />} />
+            <Spacer />
+            {/* Alert View */}
+            {(() => {
+                if (!isPrecipitation && isAlert) {
+                    const contentList = result.alert.content;
+                    return (
+                        <HStack frame={{ height: 14 }}>
+                            <Image
+                                systemName={weatherMap["ALERT"].icon}
+                                font={13}
+                                shadow={shadowStyle}
+                                symbolRenderingMode="palette"
+                                foregroundStyle={{
+                                    primary: "rgba(0, 0, 0, 0.5)",
+                                    secondary: "black",
+                                    tertiary: "white",
+                                }}
+                            />
+                            <Text foregroundStyle="white" font={14} shadow={shadowStyle} lineLimit={1}>
+                                {(() => {
+                                    if (contentList.length === 1) {
+                                        return contentList[0].title;
+                                    } else {
+                                        return contentList[0].title + "等" + (contentList.length - 1) + "项";
+                                    }
+                                })()}
+                            </Text>
+                            <Spacer />
+                        </HStack>
+                    );
+                } else {
+                    return null;
+                }
+            })()}
+            {!isPrecipitation && isAlert ? <Spacer /> : null}
+            {!isPrecipitation && isAlert ? <Divider overlay={<Rectangle fill={DeviderColor} />} /> : null}
+            {!isPrecipitation && isAlert ? <Spacer /> : null}
+            {/* Hourly View */}
+            <HourlyView hourly={result.hourly} />
+            <Spacer />
+            {isPrecipitation ? null : <Divider overlay={<Rectangle fill={DeviderColor} />} />}
+            {isPrecipitation ? null : <Spacer />}
+            {/* Daily View */}
+            {isPrecipitation ? null : (
+                <VStack padding={{ top: 8, bottom: 6 }}>
+                    {(() => {
+                        const dataLength = isAlert ? 4 : 5;
+                        const daily = result.daily;
+                        const skyconList = daily.skycon.slice(0, dataLength);
+                        const tempList = daily.temperature.slice(0, dataLength);
+
+                        const globalMin = Math.min(...tempList.map((t: { min: number }) => t.min));
+                        const globalMax = Math.max(...tempList.map((t: { max: number }) => t.max));
+                        const length = globalMax - globalMin;
+
+                        return Array.from({ length: dataLength }, (_, i) => i).map((index) => {
+                            const { date, value } = skyconList[index];
+                            const weatherValue = value as keyof typeof weatherMap;
+                            const temp = tempList[index];
+                            const dateTime = new Date(date);
+                            const weekDay = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"][
+                                dateTime.getDay()
+                            ];
+
+                            const min = temp.min;
+                            const max = temp.max;
+
+                            const minTemp = min.toFixed(0) + unit;
+                            const maxTemp = max.toFixed(0) + unit;
+
+                            const totalWidth = 138;
+                            let offsetX = totalWidth * ((min - globalMin) / length);
+                            let barWidth = totalWidth * ((max - min) / length);
+
+                            if (offsetX + barWidth > totalWidth) {
+                                barWidth = totalWidth - offsetX;
+                            }
+
+                            const fontSize = 15;
+                            const iconSize = 21;
+                            return (
+                                <HStack key={index}>
+                                    <Text
+                                        foregroundStyle="white"
+                                        bold={true}
+                                        font={fontSize}
+                                        shadow={shadowStyle}
+                                        frame={{ width: fontSize + fontSize }}>
+                                        {weekDay}
+                                    </Text>
+                                    <Spacer />
+                                    <Image
+                                        frame={{ height: iconSize, width: iconSize }}
+                                        systemName={weatherMap[weatherValue].icon}
+                                        symbolRenderingMode="multicolor"
+                                        shadow={shadowStyle}
+                                    />
+                                    <Spacer />
+
+                                    {/* Progress View */}
+                                    <Text
+                                        foregroundStyle="white"
+                                        monospacedDigit
+                                        bold={true}
+                                        font={fontSize}
+                                        opacity={0.4}>
+                                        {minTemp}
+                                    </Text>
+                                    <Capsule
+                                        frame={{ width: totalWidth, height: 4 }}
+                                        fill={"rgba(0,0,0,0.2)"}
+                                        opacity={0.5}
+                                        overlay={{
+                                            alignment: "leading",
+                                            content: (
+                                                <Rectangle
+                                                    frame={{ width: totalWidth, height: 4 }}
+                                                    fill={gradient("linear", {
+                                                        colors: [yellow, red],
+                                                        startPoint: "leading",
+                                                        endPoint: "trailing",
+                                                    })}
+                                                    mask={{
+                                                        alignment: "leading",
+                                                        content: (
+                                                            <Capsule
+                                                                offset={{ x: offsetX, y: 0 }}
+                                                                frame={{ width: barWidth, height: 4 }}
+                                                            />
+                                                        ),
+                                                    }}
+                                                />
+                                            ),
+                                        }}
+                                    />
+                                    <Text
+                                        foregroundStyle="white"
+                                        monospacedDigit
+                                        bold={true}
+                                        font={fontSize}
+                                        shadow={shadowStyle}>
+                                        {maxTemp}
+                                    </Text>
+                                </HStack>
+                            );
+                        });
+                    })()}
+                </VStack>
+            )}
+        </VStack>
+    );
+}
