@@ -135,7 +135,7 @@ export async function Present() {
                             const minTemp = min.toFixed(0) + unit;
                             const maxTemp = max.toFixed(0) + unit;
 
-                            const totalWidth = 120;
+                            const totalWidth = 100;
                             let offsetX = totalWidth * ((min - globalMin) / length);
                             let barWidth = totalWidth * ((max - min) / length);
 
