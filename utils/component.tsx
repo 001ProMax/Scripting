@@ -258,6 +258,7 @@ export function HourlyView({ hourly }: { hourly: any }) {
                                     symbolRenderingMode="multicolor"
                                     frame={{ height: 18 }}
                                     shadow={shadowStyle}
+                                    offset={{ x: 0, y: -1 }}
                                 />
                                 {/* <Spacer /> */}
                                 <Text
@@ -265,6 +266,7 @@ export function HourlyView({ hourly }: { hourly: any }) {
                                     monospacedDigit
                                     bold={true}
                                     font={14}
+                                    offset={{ x: 0, y: 2 }}
                                     shadow={shadowStyle}>
                                     {temp}
                                 </Text>
