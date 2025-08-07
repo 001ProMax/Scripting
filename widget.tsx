@@ -1,24 +1,36 @@
 import { Widget } from "scripting";
+import { fetchColorfulClouds, getLocation } from "./utils/colorfulclouds";
+import { AlertNotification, RainNotification } from "./utils/notification";
 
 (async () => {
+    const getLocationPromise = getLocation();
+
+    let path = "";
     if (Widget.family === "accessoryRectangular") {
-        const widgetView = await import("./widgets/accessaryRectangular");
-        const view = await widgetView.WidgetView();
-        Widget.present(view);
+        path = "./widgets/accessoryRectangular";
     } else if (Widget.family === "systemSmall") {
-        const widgetView = await import("./widgets/systemSmall");
-        const view = await widgetView.WidgetView();
-        Widget.present(view);
+        path = "./widgets/systemSmall";
     } else if (Widget.family === "systemMedium") {
-        const widgetView = await import("./widgets/systemMedium");
-        const view = await widgetView.WidgetView();
-        Widget.present(view);
+        path = "./widgets/systemMedium";
     } else if (Widget.family === "systemLarge") {
-        const widgetView = await import("./widgets/systemLarge");
-        await widgetView.Present();
+        path = "./widgets/systemLarge";
     } else {
         throw new Error("未适配的 Widget 尺寸");
     }
+
+    const { latitude, longitude } = await getLocationPromise;
+    const { result } = await fetchColorfulClouds(latitude, longitude);
+
+    const rainContent = result.minutely.description;
+    await RainNotification(rainContent);
+
+    const alertContent = (result.alert?.content).map((item: any) => item?.title).join("\n");
+    if (alertContent) {
+        await AlertNotification(alertContent);
+    }
+
+    const { View } = await import(path);
+    Widget.present(View(result));
 })().catch(async (e) => {
     const { Text } = await import("scripting");
     Widget.present(<Text>{String(e)}</Text>);

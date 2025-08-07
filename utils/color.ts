@@ -139,5 +139,11 @@ export const RainingViewColor_Large = gradient("linear", {
     endPoint: "bottom",
 });
 
+export const DailyColor = gradient("linear", {
+    colors: ["#FC9F19", "#FF6729"],
+    startPoint: "leading",
+    endPoint: "trailing",
+});
+
 export const DeviderColor = "rgba(255,255,255,0.6)";
 export const RainingViewAxisColor_Small = "rgba(255,255,255,0.6)";

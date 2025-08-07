@@ -1,18 +1,9 @@
 import { VStack, Spacer } from "scripting";
-import { fetchColorfulClouds, getLocation } from "../utils/colorfulclouds";
 import { getBackgroundColor } from "../utils/color";
 import { getAlartContent } from "../utils/format";
-import {
-    TitleView_Small,
-    TitleView_Large,
-    HourlyView,
-    weatherMap,
-    RainingView_Middle,
-} from "../utils/component";
+import { TitleView_Large, HourlyView, weatherMap, RainingView_Middle } from "../utils/component";
 
-export async function WidgetView() {
-    let { latitude, longitude } = await getLocation();
-    const { result } = await fetchColorfulClouds(latitude, longitude);
+export function View(result: any) {
     const unit = "°";
 
     const currentWeather: keyof typeof weatherMap = result?.realtime?.skycon;

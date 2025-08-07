@@ -1,17 +1,5 @@
-import {
-    Widget,
-    Divider,
-    Text,
-    Image,
-    HStack,
-    VStack,
-    Spacer,
-    Capsule,
-    gradient,
-    Rectangle,
-} from "scripting";
-import { fetchColorfulClouds, getLocation } from "../utils/colorfulclouds";
-import { shadowStyle, getBackgroundColor, DeviderColor } from "../utils/color";
+import { Divider, Text, Image, HStack, VStack, Spacer, Capsule, Rectangle } from "scripting";
+import { shadowStyle, getBackgroundColor, DeviderColor, DailyColor } from "../utils/color";
 import {
     TitleView_Large,
     HourlyView,
@@ -20,9 +8,7 @@ import {
     RainingView_Description_Large,
 } from "../utils/component";
 
-export async function Present() {
-    const { latitude, longitude } = await getLocation();
-    const { result } = await fetchColorfulClouds(latitude, longitude);
+export function View(result: any) {
     const unit = "°";
 
     const isAlert = result?.alert?.content?.length > 0;
@@ -31,7 +17,7 @@ export async function Present() {
     const isPrecipitation = precipitation?.some((value: number) => value !== 0) ?? false;
 
     // --- Style --- //
-    let background = getBackgroundColor(currentWeather);
+    const background = getBackgroundColor(currentWeather);
 
     const currentTemperature = result?.realtime?.temperature.toFixed(0) + unit;
     const maxTemperature = result?.daily?.temperature[0]?.max.toFixed(0) + unit;
@@ -40,10 +26,7 @@ export async function Present() {
     const adcodes = result.alert.adcodes;
     const location = adcodes[adcodes.length - 1];
 
-    const red = "#FF6729";
-    const yellow = "#FC9F19";
-
-    return Widget.present(
+    return (
         <VStack padding background={background} alignment={"leading"}>
             {/* Title */}
             <TitleView_Large
@@ -183,11 +166,7 @@ export async function Present() {
                                             content: (
                                                 <Rectangle
                                                     frame={{ width: totalWidth, height: barHeight }}
-                                                    fill={gradient("linear", {
-                                                        colors: [yellow, red],
-                                                        startPoint: "leading",
-                                                        endPoint: "trailing",
-                                                    })}
+                                                    fill={DailyColor}
                                                     mask={{
                                                         alignment: "leading",
                                                         content: (

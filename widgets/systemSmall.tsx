@@ -1,5 +1,4 @@
 import { HStack, VStack, Spacer } from "scripting";
-import { fetchColorfulClouds, getLocation } from "../utils/colorfulclouds";
 import { getBackgroundColor } from "../utils/color";
 import {
     WeatherIcon,
@@ -12,9 +11,7 @@ import {
 } from "../utils/component";
 import { getAlartContent } from "../utils/format";
 
-export async function WidgetView() {
-    let { latitude, longitude } = await getLocation();
-    const { result } = await fetchColorfulClouds(latitude, longitude);
+export function View(result: any) {
     const unit = "°";
 
     const isAlert = result?.alert?.content?.length > 0;

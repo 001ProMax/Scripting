@@ -1,12 +1,8 @@
 import { Divider, Text, Image, HStack, VStack, Spacer } from "scripting";
-import { fetchColorfulClouds, getLocation } from "../utils/colorfulclouds";
 import { firstNonZeroIndex } from "../utils/format";
 import { RainingView_Rectangle, weatherMap, RainingViewX_Small } from "../utils/component";
 
-export async function WidgetView() {
-    // --- Get Location --- //
-    const { latitude, longitude } = await getLocation();
-    const { result } = await fetchColorfulClouds(latitude, longitude);
+export function View(result: any) {
     const unit = "°";
 
     const currentWeather: keyof typeof weatherMap = result?.realtime?.skycon;

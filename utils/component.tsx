@@ -1,14 +1,4 @@
-import {
-    Text,
-    Image,
-    HStack,
-    VStack,
-    Spacer,
-    Rectangle,
-    Divider,
-    UnevenRoundedRectangle,
-    ZStack,
-} from "scripting";
+import { Text, Image, HStack, VStack, Spacer, Rectangle, Divider, UnevenRoundedRectangle } from "scripting";
 import {
     shadowStyle,
     RainingViewColor_Small,
