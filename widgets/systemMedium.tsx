@@ -21,7 +21,7 @@ export function View(result: any) {
     const location = adcodes[adcodes.length - 1];
 
     return (
-        <VStack padding background={background} alignment={"leading"}>
+        <VStack padding widgetBackground={background} alignment={"leading"}>
             {/* Title */}
             <TitleView_Large
                 frame={{ height: 24 }}

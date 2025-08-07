@@ -243,7 +243,12 @@ export function HourlyView({ hourly }: { hourly: any }) {
                     return (
                         <>
                             <VStack>
-                                <Text foregroundStyle="white" font={13} bold={true} opacity={0.64}>
+                                <Text
+                                    foregroundStyle="white"
+                                    monospacedDigit
+                                    font={13}
+                                    bold={true}
+                                    opacity={0.64}>
                                     {hour + "时"}
                                 </Text>
                                 {/* <Spacer /> */}
@@ -254,7 +259,12 @@ export function HourlyView({ hourly }: { hourly: any }) {
                                     shadow={shadowStyle}
                                 />
                                 {/* <Spacer /> */}
-                                <Text foregroundStyle="white" bold={true} font={14} shadow={shadowStyle}>
+                                <Text
+                                    foregroundStyle="white"
+                                    monospacedDigit
+                                    bold={true}
+                                    font={14}
+                                    shadow={shadowStyle}>
                                     {temp}
                                 </Text>
                             </VStack>

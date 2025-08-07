@@ -1,4 +1,4 @@
-import { Divider, Text, Image, HStack, VStack, Spacer, Capsule, Rectangle } from "scripting";
+import { Widget, Divider, Text, Image, HStack, VStack, Spacer, Capsule, Rectangle } from "scripting";
 import { shadowStyle, getBackgroundColor, DeviderColor, DailyColor } from "../utils/color";
 import {
     TitleView_Large,
@@ -27,7 +27,7 @@ export function View(result: any) {
     const location = adcodes[adcodes.length - 1];
 
     return (
-        <VStack padding background={background} alignment={"leading"}>
+        <VStack padding widgetBackground={background} alignment={"leading"}>
             {/* Title */}
             <TitleView_Large
                 weatherIcon={weatherMap[currentWeather].icon}
@@ -118,7 +118,7 @@ export function View(result: any) {
                             const minTemp = min.toFixed(0) + unit;
                             const maxTemp = max.toFixed(0) + unit;
 
-                            const totalWidth = 100;
+                            const totalWidth = Widget.displaySize.width / 2 - 32;
                             let offsetX = totalWidth * ((min - globalMin) / length);
                             let barWidth = totalWidth * ((max - min) / length);
 
@@ -154,7 +154,7 @@ export function View(result: any) {
                                         monospacedDigit
                                         bold={true}
                                         font={fontSize}
-                                        opacity={0.4}>
+                                        opacity={0.6}>
                                         {minTemp}
                                     </Text>
                                     <Capsule

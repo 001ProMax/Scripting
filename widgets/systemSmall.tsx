@@ -25,7 +25,7 @@ export function View(result: any) {
     const currentTemperature = result?.realtime?.temperature.toFixed(0) + unit;
 
     return (
-        <VStack padding alignment={"leading"} background={getBackgroundColor(currentWeather)}>
+        <VStack padding alignment={"leading"} widgetBackground={getBackgroundColor(currentWeather)}>
             {/* Title */}
             <HStack alignment={"top"} padding={{ top: -2 }}>
                 <TitleLocationView location={location.name} isCurrentLocation={true} />
