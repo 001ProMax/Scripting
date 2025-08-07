@@ -243,6 +243,7 @@ export function HourlyView({ hourly }: { hourly: any }) {
                     return (
                         <>
                             <VStack>
+                                {/* <Spacer /> */}
                                 <Text
                                     foregroundStyle="white"
                                     monospacedDigit
@@ -255,7 +256,7 @@ export function HourlyView({ hourly }: { hourly: any }) {
                                 <Image
                                     systemName={weatherMap[skycon.value as keyof typeof weatherMap].icon}
                                     symbolRenderingMode="multicolor"
-                                    frame={{ height: 16 }}
+                                    frame={{ height: 18 }}
                                     shadow={shadowStyle}
                                 />
                                 {/* <Spacer /> */}
@@ -267,6 +268,7 @@ export function HourlyView({ hourly }: { hourly: any }) {
                                     shadow={shadowStyle}>
                                     {temp}
                                 </Text>
+                                {/* <Spacer /> */}
                             </VStack>
                             {index < 5 ? <Spacer /> : null}
                         </>

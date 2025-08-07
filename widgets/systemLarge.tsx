@@ -92,7 +92,7 @@ export function View(result: any) {
             {isPrecipitation ? null : <Spacer />}
             {/* Daily View */}
             {isPrecipitation ? null : (
-                <VStack padding={{ top: 8, bottom: 6 }}>
+                <VStack padding={{ top: 8, bottom: 8 }}>
                     {(() => {
                         const dataLength = isAlert ? 4 : 5;
                         const daily = result.daily;
@@ -118,12 +118,13 @@ export function View(result: any) {
                             const minTemp = min.toFixed(0) + unit;
                             const maxTemp = max.toFixed(0) + unit;
 
-                            const totalWidth = Widget.displaySize.width / 2 - 32;
-                            let offsetX = totalWidth * ((min - globalMin) / length);
-                            let barWidth = totalWidth * ((max - min) / length);
+                            const DailyBarWidth = Widget.displaySize.width / 2 - 40;
 
-                            if (offsetX + barWidth > totalWidth) {
-                                barWidth = totalWidth - offsetX;
+                            let offsetX = DailyBarWidth * ((min - globalMin) / length);
+                            let barWidth = DailyBarWidth * ((max - min) / length);
+
+                            if (offsetX + barWidth > DailyBarWidth) {
+                                barWidth = DailyBarWidth - offsetX;
                             }
 
                             const fontSize = 15;
@@ -158,14 +159,14 @@ export function View(result: any) {
                                         {minTemp}
                                     </Text>
                                     <Capsule
-                                        frame={{ width: totalWidth, height: barHeight }}
+                                        frame={{ width: DailyBarWidth, height: barHeight }}
                                         fill={"rgba(0,0,0,0.2)"}
                                         opacity={0.5}
                                         overlay={{
                                             alignment: "leading",
                                             content: (
                                                 <Rectangle
-                                                    frame={{ width: totalWidth, height: barHeight }}
+                                                    frame={{ width: DailyBarWidth, height: barHeight }}
                                                     fill={DailyColor}
                                                     mask={{
                                                         alignment: "leading",
