@@ -24,6 +24,7 @@ export function View(result: any) {
         <VStack padding widgetBackground={background} alignment={"leading"}>
             {/* Title */}
             <TitleView_Large
+                offset={{ x: 0, y: -2 }}
                 frame={{ height: 24 }}
                 weatherIcon={weatherMap[currentWeather].icon}
                 weatherName={weatherMap[currentWeather].text}
@@ -44,7 +45,7 @@ export function View(result: any) {
                 </>
             ) : (
                 <>
-                    <HourlyView hourly={result.hourly} frame={{ height: 70 }} />
+                    <HourlyView hourly={result.hourly} frame={{ height: 70 }} offset={{ x: 0, y: 4 }} />
                 </>
             )}
         </VStack>
