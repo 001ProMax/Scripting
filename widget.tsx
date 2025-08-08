@@ -30,7 +30,11 @@ import { AlertNotification, RainNotification } from "./utils/notification";
     }
 
     const { View } = await import(path);
-    Widget.present(View(result));
+    Widget.present(View(result), {
+        // reload 5 minutes later
+        policy: "after",
+        date: new Date(Date.now() + 1000 * 60 * 5),
+    });
 })().catch(async (e) => {
     const { Text } = await import("scripting");
     Widget.present(<Text>{String(e)}</Text>);
