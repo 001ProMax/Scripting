@@ -17,7 +17,7 @@ function processDevData(data: any) {
     // [0, 1, 2, 57, 58, 59].forEach((i) => (precipitationBody[i] = 1));
 
     // 强制前三项为 1
-    Object.assign(precipitationBody, { 0: 1, 1: 1, 2: 1 });
+    // Object.assign(precipitationBody, { 0: 1, 1: 1, 2: 1 });
 
     // 强制前三项为 0
     // Object.assign(precipitationBody, { 0: 0, 1: 0, 2: 0 });

@@ -1,4 +1,4 @@
-import { HStack, VStack, Spacer } from "scripting";
+import { HStack, VStack, Spacer, Widget } from "scripting";
 import { getBackgroundColor } from "../utils/color";
 import {
     WeatherIcon,
@@ -38,51 +38,50 @@ export function View(result: any) {
 
             {/* <Spacer /> */}
             {/* Bottom */}
-            {isPrecipitation ? (
-                <>
-                    <RainingView_Description_Small
-                        content={"未来一小时" + weatherMap[currentWeather].text}
-                        padding={{ top: -6, bottom: -2 }}
-                    />
-                    <Spacer />
-                    <RainingView_Small
-                        data={precipitation}
-                        // padding={{ top: -30 }}
-                    />
-                </>
-            ) : (
-                <>
-                    <Spacer />
-                    <WeatherIcon
-                        frame={{ height: 10 }}
-                        padding={{ top: -10 }}
-                        weatherIcon={weatherMap[currentWeather].icon}
-                    />
-                    {(() => {
-                        if (isAlert) {
-                            return (
-                                <TitleDailyTemperatureView
-                                    padding={{ bottom: -10 }}
-                                    alignment={"leading"}
-                                    content={getAlartContent(result.alert.content)}
-                                />
-                            );
-                        } else {
-                            const maxTemperature = result?.daily?.temperature[0]?.max.toFixed(0) + unit;
-                            const minTemperature = result?.daily?.temperature[0]?.min.toFixed(0) + unit;
-                            return (
-                                <TitleDailyTemperatureView
-                                    padding={{ bottom: -8 }}
-                                    alignment={"leading"}
-                                    weatherName={weatherMap[currentWeather].text}
-                                    maxTemperature={maxTemperature}
-                                    minTemperature={minTemperature}
-                                />
-                            );
-                        }
-                    })()}
-                </>
-            )}
+            <VStack alignment={"leading"}>
+                {isPrecipitation ? (
+                    <>
+                        <RainingView_Description_Small
+                            content={"未来一小时" + weatherMap[currentWeather].text}
+                            padding={{ top: -8, bottom: -4 }}
+                        />
+                        <Spacer />
+                        <RainingView_Small heightRate={0.44} data={precipitation} />
+                    </>
+                ) : (
+                    <>
+                        <Spacer />
+                        <WeatherIcon
+                            frame={{ height: 14 }}
+                            padding={{ top: -8 }}
+                            weatherIcon={weatherMap[currentWeather].icon}
+                        />
+                        {(() => {
+                            if (isAlert) {
+                                return (
+                                    <TitleDailyTemperatureView
+                                        padding={{ bottom: -10 }}
+                                        alignment={"leading"}
+                                        content={getAlartContent(result.alert.content)}
+                                    />
+                                );
+                            } else {
+                                const maxTemperature = result?.daily?.temperature[0]?.max.toFixed(0) + unit;
+                                const minTemperature = result?.daily?.temperature[0]?.min.toFixed(0) + unit;
+                                return (
+                                    <TitleDailyTemperatureView
+                                        padding={{ bottom: -8 }}
+                                        alignment={"leading"}
+                                        weatherName={weatherMap[currentWeather].text}
+                                        maxTemperature={maxTemperature}
+                                        minTemperature={minTemperature}
+                                    />
+                                );
+                            }
+                        })()}
+                    </>
+                )}
+            </VStack>
         </VStack>
     );
 }

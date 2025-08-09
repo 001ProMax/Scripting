@@ -1,4 +1,15 @@
-import { Text, Image, HStack, VStack, Spacer, Rectangle, Divider, UnevenRoundedRectangle } from "scripting";
+import {
+    Text,
+    Image,
+    HStack,
+    Widget,
+    VStack,
+    ZStack,
+    Spacer,
+    Rectangle,
+    Divider,
+    UnevenRoundedRectangle,
+} from "scripting";
 import {
     shadowStyle,
     RainingViewColor_Small,
@@ -7,6 +18,8 @@ import {
     RainingViewAxisColor_Small,
 } from "./color";
 import { compressTo20 } from "../utils/format";
+
+const { width, height } = Widget.displaySize;
 
 const unit = "°";
 
@@ -104,7 +117,7 @@ export function TitleView_Large({
                 <WeatherIcon weatherIcon={weatherIcon} />
             </HStack>
             {/* <Spacer /> */}
-            <HStack alignment={"bottom"} padding={{ bottom: -4 }}>
+            <HStack alignment={"bottom"}>
                 <TitleCurrentTemperatureView temperature={temperature} />
                 <Spacer />
                 <TitleDailyTemperatureView
@@ -313,115 +326,104 @@ export function RainingView_Rectangle({ data }: { data: number[] }) {
     );
 }
 
-export function RainingView_Small({ data }: { data: number[] }) {
+export function RainingView_Small({ data, heightRate }: { data: number[]; heightRate: number }) {
+    const barHeight = height * heightRate;
     const barSpacing = 3;
-
     return (
         <VStack alignment={"leading"}>
-            {/* <ZStack alignment={"top"}>
-                <Divider overlay={<Rectangle />} />
-
-                <Divider overlay={<Rectangle fill={DeviderColor} offset={{ x: 0, y: barHeight / 3 }} />} />
-                <Divider
-                    overlay={<Rectangle fill={DeviderColor} offset={{ x: 0, y: (barHeight * 2) / 3 }} />}
-                /> */}
-            <HStack spacing={barSpacing} alignment={"bottom"}>
-                {compressTo20(data).map((length: number) => {
-                    return (
-                        <Rectangle
-                            fill={"clear"}
-                            overlay={{
-                                alignment: "bottom",
-                                content: (
-                                    <Rectangle
-                                        fill={RainingViewColor_Small}
-                                        mask={{
-                                            alignment: "bottom",
-                                            content: (
-                                                <UnevenRoundedRectangle
-                                                    topLeadingRadius={10}
-                                                    topTrailingRadius={10}
-                                                    bottomLeadingRadius={0}
-                                                    bottomTrailingRadius={0}
-                                                    scaleEffect={{
-                                                        x: 1,
-                                                        y: length,
-                                                        anchor: "bottom",
-                                                    }}
-                                                    // clipShape={{
-                                                    //     style: "continuous",
-                                                    //     type: "rect",
-                                                    //     cornerRadii: {
-                                                    //         topLeading: 3,
-                                                    //         topTrailing: 3,
-                                                    //         bottomLeading: 0,
-                                                    //         bottomTrailing: 0,
-                                                    //     },
-                                                    // }}
-                                                />
-                                            ),
-                                        }}
-                                    />
-                                ),
-                            }}
-                        />
-                    );
-                })}
-            </HStack>
-            {/* </ZStack> */}
+            <ZStack alignment={"top"}>
+                <Divider overlay={<Rectangle fill={"gray"} />} />
+                <Divider overlay={<Rectangle fill={"gray"} offset={{ x: 0, y: barHeight / 3 }} />} />
+                <Divider overlay={<Rectangle fill={"gray"} offset={{ x: 0, y: (barHeight * 2) / 3 }} />} />
+                <HStack spacing={barSpacing} alignment={"bottom"} frame={{ height: barHeight }}>
+                    {compressTo20(data).map((length: number) => {
+                        return (
+                            <Rectangle
+                                fill={"clear"}
+                                overlay={{
+                                    alignment: "bottom",
+                                    content: (
+                                        <Rectangle
+                                            fill={RainingViewColor_Small}
+                                            mask={{
+                                                alignment: "bottom",
+                                                content: (
+                                                    <UnevenRoundedRectangle
+                                                        topLeadingRadius={10}
+                                                        topTrailingRadius={10}
+                                                        bottomLeadingRadius={0}
+                                                        bottomTrailingRadius={0}
+                                                        frame={{
+                                                            height: barHeight * length,
+                                                        }}
+                                                    />
+                                                ),
+                                            }}
+                                        />
+                                    ),
+                                }}
+                            />
+                        );
+                    })}
+                </HStack>
+            </ZStack>
             <Divider overlay={<Rectangle fill={DeviderColor} />} padding={{ top: -8 }} />
             <RainingViewX_Small padding={{ top: -15 }} />
         </VStack>
     );
 }
 
-export function RainingView_Middle({ data }: { data: number[] }) {
+export function RainingView_Middle({
+    data,
+    heightRate,
+    leaving,
+}: {
+    data: number[];
+    heightRate: number;
+    leaving: number;
+}) {
+    const barHeight = height * heightRate - leaving;
     const barSpacing = 2.5;
     return (
         <VStack alignment={"leading"}>
             <Spacer />
-            <RainingView_Title padding={{ bottom: -8 }} />
-            {/* <ZStack alignment={"top"}> */}
-            {/* <Divider overlay={<Rectangle fill={"systemGray"} />} />
-                <Divider overlay={<Rectangle fill={"systemGray"} />} offset={{ x: 0, y: barHeight / 3 }} />
-                <Divider
-                    overlay={<Rectangle fill={"systemGray"} />}
-                    offset={{ x: 0, y: (barHeight * 2) / 3 }}
-                /> */}
-            <HStack alignment={"bottom"} spacing={barSpacing}>
-                {data.map((length: number) => {
-                    return (
-                        <Rectangle
-                            fill={"clear"}
-                            overlay={{
-                                alignment: "bottom",
-                                content: (
-                                    <Rectangle
-                                        fill={RainingViewColor_Large}
-                                        mask={{
-                                            alignment: "bottom",
-                                            content: (
-                                                <UnevenRoundedRectangle
-                                                    topLeadingRadius={3}
-                                                    topTrailingRadius={3}
-                                                    bottomLeadingRadius={0}
-                                                    bottomTrailingRadius={0}
-                                                    scaleEffect={{
-                                                        x: 1,
-                                                        y: length,
-                                                        anchor: "bottom",
-                                                    }}
-                                                />
-                                            ),
-                                        }}
-                                    />
-                                ),
-                            }}
-                        />
-                    );
-                })}
-            </HStack>
-            {/* </ZStack> */}
+            <RainingView_Title padding={{ top: 2, bottom: -6 }} />
+            <ZStack alignment={"top"}>
+                <Divider overlay={<Rectangle fill={"gray"} />} />
+                <Divider overlay={<Rectangle fill={"gray"} />} offset={{ x: 0, y: barHeight / 3 }} />
+                <Divider overlay={<Rectangle fill={"gray"} />} offset={{ x: 0, y: (barHeight * 2) / 3 }} />
+                <HStack alignment={"bottom"} spacing={barSpacing} frame={{ height: barHeight }}>
+                    {data.map((length: number) => {
+                        return (
+                            <Rectangle
+                                fill={"clear"}
+                                overlay={{
+                                    alignment: "bottom",
+                                    content: (
+                                        <Rectangle
+                                            fill={RainingViewColor_Large}
+                                            mask={{
+                                                alignment: "bottom",
+                                                content: (
+                                                    <UnevenRoundedRectangle
+                                                        topLeadingRadius={5}
+                                                        topTrailingRadius={5}
+                                                        bottomLeadingRadius={0}
+                                                        bottomTrailingRadius={0}
+                                                        frame={{
+                                                            height: barHeight * length,
+                                                        }}
+                                                    />
+                                                ),
+                                            }}
+                                        />
+                                    ),
+                                }}
+                            />
+                        );
+                    })}
+                </HStack>
+            </ZStack>
             <Divider overlay={<Rectangle fill={DeviderColor} />} padding={{ top: -8 }} />
             <RainingViewX_Large padding={{ top: -12 }} />
         </VStack>
@@ -439,7 +441,7 @@ export function RainingView_Middle({ data }: { data: number[] }) {
 // }
 
 export function WeatherIcon({ weatherIcon }: { weatherIcon: string }) {
-    return <Image font={16} systemName={weatherIcon} symbolRenderingMode="multicolor" shadow={shadowStyle} />;
+    return <Image font={17} systemName={weatherIcon} symbolRenderingMode="multicolor" shadow={shadowStyle} />;
 }
 
 function RainingView_Title() {
@@ -460,7 +462,7 @@ export function RainingView_Description_Small({ content }: { content: string }) 
 
 export function RainingView_Description_Large({ content }: { content: string }) {
     return (
-        <Text font={16} foregroundStyle={"white"}>
+        <Text font={16} foregroundStyle={"white"} lineLimit={1}>
             {content}
         </Text>
     );

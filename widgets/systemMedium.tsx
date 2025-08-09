@@ -1,7 +1,9 @@
-import { VStack, Spacer } from "scripting";
+import { VStack, Spacer, Widget } from "scripting";
 import { getBackgroundColor } from "../utils/color";
 import { getAlartContent } from "../utils/format";
 import { TitleView_Large, HourlyView, weatherMap, RainingView_Middle } from "../utils/component";
+
+const { width, height } = Widget.displaySize;
 
 export function View(result: any) {
     const unit = "°";
@@ -22,10 +24,8 @@ export function View(result: any) {
 
     return (
         <VStack padding widgetBackground={background} alignment={"leading"}>
-            {/* Title */}
             <TitleView_Large
-                offset={{ x: 0, y: -2 }}
-                frame={{ height: 24 }}
+                frame={{ height: isPrecipitation ? 24 : 26 }}
                 weatherIcon={weatherMap[currentWeather].icon}
                 weatherName={weatherMap[currentWeather].text}
                 maxTemperature={maxTemperature}
@@ -38,14 +38,23 @@ export function View(result: any) {
                 }
             />
             <Spacer />
-            {/* Bottom */}
             {isPrecipitation ? (
                 <>
-                    <RainingView_Middle data={precipitation} frame={{ height: 70 }} />
+                    <RainingView_Middle
+                        data={precipitation}
+                        heightRate={0.76}
+                        leaving={92}
+                        frame={{ height: height * 0.45 }}
+                        padding={{ top: 2 }}
+                    />
                 </>
             ) : (
                 <>
-                    <HourlyView hourly={result.hourly} frame={{ height: 70 }} offset={{ x: 0, y: 4 }} />
+                    <HourlyView
+                        hourly={result.hourly}
+                        padding={{ top: 4 }}
+                        frame={{ height: height * 0.45 }}
+                    />
                 </>
             )}
         </VStack>

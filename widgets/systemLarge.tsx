@@ -42,7 +42,12 @@ export function View(result: any) {
             {/* Raining View */}
             {isPrecipitation ? (
                 <>
-                    <RainingView_Middle data={precipitation} />
+                    <RainingView_Middle
+                        data={precipitation}
+                        heightRate={0.75}
+                        leaving={178}
+                        padding={{ top: -12 }}
+                    />
                     <Spacer />
                     <RainingView_Description_Large content={result.minutely.description} />
                 </>
@@ -92,7 +97,7 @@ export function View(result: any) {
             {isPrecipitation ? null : <Spacer />}
             {/* Daily View */}
             {isPrecipitation ? null : (
-                <VStack padding={{ top: 8, bottom: 8 }}>
+                <VStack padding={{ top: 6, bottom: 6 }}>
                     {(() => {
                         const dataLength = isAlert ? 4 : 5;
                         const daily = result.daily;

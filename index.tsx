@@ -1,17 +1,14 @@
-import { Script } from "scripting";
+import { Script, Navigation } from "scripting";
+import { SettingView } from "./pages/setting";
 
 (async () => {
-    let location = await Location.pickFromMap();
-
-    if (location) {
-        Clipboard.copyText(JSON.stringify(location));
-    } else {
-        const key = "Location";
-        location = await Location.requestCurrent();
-        Storage.set(key, location);
-    }
-
-    Script.exit();
-})().catch((e) => {
-    console.log(e.message);
-});
+    await Navigation.present({
+        element: <SettingView />,
+    });
+})()
+    .catch((e) => {
+        console.log(e.message);
+    })
+    .finally(() => {
+        Script.exit();
+    });
