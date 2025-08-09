@@ -22,8 +22,14 @@ import { profile } from "./pages/setting";
     const { latitude, longitude } = await getLocationPromise;
     const { result } = await fetchColorfulClouds(latitude, longitude);
 
-    const rainContent = result.minutely.description;
-    await RainNotification(rainContent);
+    const key = "CurrentWeather";
+
+    const { rainContent = "" } = Storage.get(key) as any;
+    const content = result.minutely.description;
+    if (rainContent !== content && !(rainContent?.includes("后开始") && content.includes("后开始"))) {
+        await RainNotification(rainContent);
+        Storage.set(key, { rainContent: content });
+    }
 
     const alertContent = (result.alert?.content).map((item: any) => item?.title).join("\n");
     if (alertContent) {
