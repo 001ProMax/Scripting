@@ -23,19 +23,24 @@ import { profile } from "./pages/setting";
     const { result } = await fetchColorfulClouds(latitude, longitude);
 
     const key = "CurrentWeather";
-
-    const content = result.minutely.description;
     const stored = (Storage.get(key) as any) || {};
-    const rainContent = stored?.rainContent || "";
 
-    if (rainContent !== content && !(rainContent?.includes("后开始") && content.includes("后开始"))) {
-        await RainNotification(content);
-        Storage.set(key, { rainContent: content });
+    const rainContent = result.minutely.description;
+    const storedRainContent = stored?.rainContent || "";
+
+    if (
+        storedRainContent !== rainContent &&
+        !(storedRainContent?.includes("后开始") && rainContent.includes("后开始"))
+    ) {
+        await RainNotification(rainContent);
+        Storage.set(key, { ...stored, rainContent });
     }
 
+    const storedAlertContent = stored?.alertContent || "";
     const alertContent = (result.alert?.content).map((item: any) => item?.title).join("\n");
-    if (alertContent) {
+    if (alertContent !== storedAlertContent) {
         await AlertNotification(alertContent);
+        Storage.set(key, { ...stored, alertContent });
     }
 
     const { View } = await import(path);
