@@ -24,10 +24,12 @@ import { profile } from "./pages/setting";
 
     const key = "CurrentWeather";
 
-    const { rainContent = "" } = Storage.get(key) as any;
     const content = result.minutely.description;
+    const stored = (Storage.get(key) as any) || {};
+    const rainContent = stored?.rainContent || "";
+
     if (rainContent !== content && !(rainContent?.includes("后开始") && content.includes("后开始"))) {
-        await RainNotification(rainContent);
+        await RainNotification(content);
         Storage.set(key, { rainContent: content });
     }
 
