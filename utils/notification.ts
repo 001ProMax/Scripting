@@ -6,8 +6,8 @@ const name = Script.name;
 
 export async function RainNotification(title: string, subtitle: string, content: string) {
     await Notification.schedule({
-        title: title,
-        subtitle: subtitle,
+        title: title + "：" + subtitle,
+        // subtitle: subtitle,
         body: content,
         threadIdentifier: name,
         avoidRunningCurrentScriptWhenTapped: true,
@@ -16,21 +16,13 @@ export async function RainNotification(title: string, subtitle: string, content:
 }
 
 export async function AlertNotification(content: string, location: string) {
-    const weatherJson: any = Storage.get(key) || {};
-    const { alertContent } = weatherJson;
-
-    if (alertContent !== content) {
-        await Notification.schedule({
-            title: location,
-            body: content,
-            threadIdentifier: name,
-            avoidRunningCurrentScriptWhenTapped: true,
-            // customUI: true,
-        });
-
-        weatherJson.alertContent = content;
-        Storage.set(key, weatherJson);
-    }
+    await Notification.schedule({
+        title: location + "：" + "极端天气",
+        body: content,
+        threadIdentifier: name,
+        avoidRunningCurrentScriptWhenTapped: true,
+        // customUI: true,
+    });
 }
 
 export async function handleNotifications(result: any, isCurrentLocation: boolean) {
@@ -50,7 +42,7 @@ export async function handleNotifications(result: any, isCurrentLocation: boolea
     stored.alert = stored.alert || {};
 
     const adcodes = result.alert.adcodes;
-    const location = isCurrentLocation ? "当前位置" : adcodes[adcodes.length - 1];
+    const location = isCurrentLocation ? "当前位置" : adcodes[adcodes.length - 1].name;
 
     const rainContent = result.minutely.description;
     const storedRainContent = stored.rain.content || "";
