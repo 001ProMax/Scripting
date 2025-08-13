@@ -192,17 +192,19 @@ export function AlertView_Small({ content }: { content: string }) {
 
 export function AlertView_Large({ content }: { content: string }) {
     return (
-        <Text
-            // padding={{ bottom: 9 }}
-            frame={{ height: 52 }}
-            foregroundStyle="white"
-            bold={true}
-            font={14}
-            shadow={shadowStyle}
-            lineLimit={2}
-            multilineTextAlignment={"trailing"}>
-            {content}
-        </Text>
+        <VStack frame={{ height: 42 }} padding={{ bottom: 10 }}>
+            <Spacer />
+            <Text
+                // padding={{ bottom: 9 }}
+                foregroundStyle="white"
+                bold={true}
+                font={14}
+                shadow={shadowStyle}
+                lineLimit={2}
+                multilineTextAlignment={"trailing"}>
+                {content}
+            </Text>
+        </VStack>
     );
 }
 

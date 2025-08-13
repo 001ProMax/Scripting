@@ -25,7 +25,7 @@ export function View(result: any) {
     return (
         <VStack padding widgetBackground={background} alignment={"leading"}>
             <TitleView_Large
-                frame={{ height: isPrecipitation ? 24 : 26 }}
+                frame={{ height: isPrecipitation ? 22 : 26 }}
                 weatherIcon={weatherMap[currentWeather].icon}
                 weatherName={weatherMap[currentWeather].text}
                 maxTemperature={maxTemperature}
@@ -44,8 +44,9 @@ export function View(result: any) {
                         data={precipitation}
                         heightRate={0.76}
                         leaving={92}
-                        frame={{ height: height * 0.45 }}
-                        padding={{ top: 2 }}
+                        frame={{ height: height * 0.42 }}
+                        padding={{ top: 4 }}
+                        // offset={{ x: 0, y: -6 }}
                     />
                 </>
             ) : (
@@ -53,7 +54,7 @@ export function View(result: any) {
                     <HourlyView
                         hourly={result.hourly}
                         padding={{ top: 4 }}
-                        frame={{ height: height * 0.45 }}
+                        frame={{ height: height * 0.42 }}
                     />
                 </>
             )}
