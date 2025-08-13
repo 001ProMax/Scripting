@@ -1,7 +1,6 @@
 import { Notification, Script } from "scripting";
 import { profile } from "../pages/setting";
 
-const key = "CurrentWeather";
 const name = Script.name;
 
 export async function RainNotification(title: string, subtitle: string, content: string) {
