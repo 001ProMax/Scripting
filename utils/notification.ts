@@ -53,7 +53,7 @@ export async function handleNotifications(result: any, isCurrentLocation: boolea
             if (/\d/.test(rainContent)) {
                 // 判断是否为当地通知
                 const isLocal = rainContent.includes("后");
-                if (isLocal) {
+                if (isLocal && !onlyNumberChanged(storedRainContent, rainContent)) {
                     if (isLocalNotify) {
                         await RainNotification(location, "降水状况", rainContent);
                         stored.rain.time = now;
@@ -87,4 +87,11 @@ export async function handleNotifications(result: any, isCurrentLocation: boolea
         stored.alert.content = newTitles;
         Storage.set(key, stored);
     }
+}
+
+function onlyNumberChanged(a: string, b: string) {
+    // 把所有数字替换成占位符
+    const normalize = (str: string) => str.replace(/\d+/g, "{num}");
+    // 比较两个字符串是否只有数字部分不同
+    return normalize(a) === normalize(b);
 }
