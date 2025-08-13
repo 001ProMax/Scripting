@@ -91,8 +91,13 @@ export function getBackgroundColor(currentWeather: string) {
             case "LIGHT_RAIN":
             case "MODERATE_RAIN":
             case "HEAVY_RAIN": // 默认雨
+                // return gradient("linear", {
+                //     colors: ["#5E6B7E", "#495666"],
+                //     startPoint: "top",
+                //     endPoint: "bottom",
+                // });
                 return gradient("linear", {
-                    colors: ["#5E6B7E", "#495666"],
+                    colors: ["#182130", "#202D3D"],
                     startPoint: "top",
                     endPoint: "bottom",
                 });

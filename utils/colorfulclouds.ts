@@ -10,7 +10,7 @@ function processDevData(data: any) {
 
     isAlert = true;
 
-    currentWeather = "STORM_RAIN";
+    currentWeather = "HEAVY_RAIN";
 
     // precipitationBody = Array.from({ length: 60 }, (_, i) => i * 0.01);
     precipitationBody = Array.from({ length: 60 }, () => Math.random());
