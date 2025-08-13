@@ -77,13 +77,16 @@ export function TitleView_Small({
             <HStack alignment={"bottom"}>
                 <TitleCurrentTemperatureView temperature={temperature} />
                 <Spacer />
-                <TitleDailyTemperatureView
-                    alignment={"leading"}
-                    weatherName={weatherName}
-                    maxTemperature={maxTemperature}
-                    minTemperature={minTemperature}
-                    content={content}
-                />
+                {content ? (
+                    <AlertView_Small content={content} />
+                ) : (
+                    <TitleDailyTemperatureView
+                        alignment={"leading"}
+                        weatherName={weatherName}
+                        maxTemperature={maxTemperature}
+                        minTemperature={minTemperature}
+                    />
+                )}
             </HStack>
         </VStack>
     );
@@ -120,13 +123,16 @@ export function TitleView_Large({
             <HStack alignment={"bottom"}>
                 <TitleCurrentTemperatureView temperature={temperature} />
                 <Spacer />
-                <TitleDailyTemperatureView
-                    alignment={"trailing"}
-                    weatherName={weatherName}
-                    maxTemperature={maxTemperature}
-                    minTemperature={minTemperature}
-                    content={content}
-                />
+                {content ? (
+                    <AlertView_Large content={content} />
+                ) : (
+                    <TitleDailyTemperatureView
+                        alignment={"trailing"}
+                        weatherName={weatherName}
+                        maxTemperature={maxTemperature}
+                        minTemperature={minTemperature}
+                    />
+                )}
             </HStack>
         </>
     );
@@ -170,76 +176,87 @@ export function TitleCurrentTemperatureView({ temperature }: { temperature: stri
     );
 }
 
+export function AlertView_Small({ content }: { content: string }) {
+    return (
+        <Text
+            foregroundStyle="white"
+            bold={true}
+            font={14}
+            shadow={shadowStyle}
+            lineLimit={2}
+            multilineTextAlignment={"leading"}>
+            {content}
+        </Text>
+    );
+}
+
+export function AlertView_Large({ content }: { content: string }) {
+    return (
+        <Text
+            // padding={{ bottom: 9 }}
+            frame={{ height: 52 }}
+            foregroundStyle="white"
+            bold={true}
+            font={14}
+            shadow={shadowStyle}
+            lineLimit={2}
+            multilineTextAlignment={"trailing"}>
+            {content}
+        </Text>
+    );
+}
+
 export function TitleDailyTemperatureView({
     alignment,
     weatherName,
     maxTemperature,
     minTemperature,
-    content,
 }: {
     alignment: "leading" | "trailing";
     weatherName?: string;
     maxTemperature?: string;
     minTemperature?: string;
-    content?: string;
 }) {
     return (
-        <>
-            {content ? (
-                <>
-                    <Text
-                        padding={{ bottom: 9 }}
-                        foregroundStyle="white"
-                        bold={true}
-                        font={14}
-                        shadow={shadowStyle}
-                        lineLimit={2}
-                        multilineTextAlignment={alignment}>
-                        {content}
+        <VStack alignment={alignment} padding={{ bottom: 5 }}>
+            <Text foregroundStyle="white" fontWeight={"medium"} font={15} shadow={shadowStyle}>
+                {weatherName || ""}
+            </Text>
+            <HStack padding={{ top: -12 }}>
+                <VStack spacing={-2}>
+                    <Text foregroundStyle="white" font={10} shadow={shadowStyle}>
+                        {"最"}
                     </Text>
-                </>
-            ) : (
-                <VStack alignment={alignment} padding={{ bottom: 5 }}>
-                    <Text foregroundStyle="white" fontWeight={"medium"} font={15} shadow={shadowStyle}>
-                        {weatherName || ""}
+                    <Text foregroundStyle="white" font={10} shadow={shadowStyle}>
+                        {"高"}
                     </Text>
-                    <HStack padding={{ top: -12 }}>
-                        <VStack spacing={-2}>
-                            <Text foregroundStyle="white" font={10} shadow={shadowStyle}>
-                                {"最"}
-                            </Text>
-                            <Text foregroundStyle="white" font={10} shadow={shadowStyle}>
-                                {"高"}
-                            </Text>
-                        </VStack>
-                        <Text
-                            foregroundStyle="white"
-                            font={24}
-                            fontWeight="light"
-                            padding={{ leading: -6 }}
-                            shadow={shadowStyle}>
-                            {maxTemperature || ""}
-                        </Text>
-                        <VStack spacing={-2}>
-                            <Text foregroundStyle="white" font={10} shadow={shadowStyle}>
-                                {"最"}
-                            </Text>
-                            <Text foregroundStyle="white" font={10} shadow={shadowStyle}>
-                                {"低"}
-                            </Text>
-                        </VStack>
-                        <Text
-                            foregroundStyle="white"
-                            font={24}
-                            fontWeight="light"
-                            padding={{ leading: -6 }}
-                            shadow={shadowStyle}>
-                            {minTemperature || ""}
-                        </Text>
-                    </HStack>
                 </VStack>
-            )}
-        </>
+                <Text
+                    foregroundStyle="white"
+                    font={24}
+                    fontWeight="light"
+                    padding={{ leading: -6 }}
+                    shadow={shadowStyle}>
+                    {maxTemperature || ""}
+                </Text>
+                <VStack spacing={-2}>
+                    <Text foregroundStyle="white" font={10} shadow={shadowStyle}>
+                        {"最"}
+                    </Text>
+                    <Text foregroundStyle="white" font={10} shadow={shadowStyle}>
+                        {"低"}
+                    </Text>
+                </VStack>
+                <Text
+                    foregroundStyle="white"
+                    font={24}
+                    fontWeight="light"
+                    padding={{ leading: -6 }}
+                    shadow={shadowStyle}>
+                    {minTemperature || ""}
+                </Text>
+            </HStack>
+        </VStack>
     );
 }
 

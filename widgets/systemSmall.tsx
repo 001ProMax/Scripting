@@ -5,6 +5,7 @@ import {
     weatherMap,
     RainingView_Small,
     RainingView_Description_Small,
+    AlertView_Small,
     TitleLocationView,
     TitleDailyTemperatureView,
     TitleCurrentTemperatureView,
@@ -61,13 +62,18 @@ export function View(result: any) {
                         />
                         {(() => {
                             if (isAlert) {
-                                return (
-                                    <TitleDailyTemperatureView
-                                        padding={{ bottom: -10 }}
-                                        alignment={"leading"}
-                                        content={getAlartContent(result.alert.content)}
-                                    />
-                                );
+                                const content = getAlartContent(result.alert.content);
+
+                                if (content) {
+                                    return <AlertView_Small content={content} />;
+                                } else {
+                                    return (
+                                        <TitleDailyTemperatureView
+                                            padding={{ bottom: -10 }}
+                                            alignment={"leading"}
+                                        />
+                                    );
+                                }
                             } else {
                                 const maxTemperature = result?.daily?.temperature[0]?.max.toFixed(0) + unit;
                                 const minTemperature = result?.daily?.temperature[0]?.min.toFixed(0) + unit;
