@@ -29,12 +29,10 @@ export function getUint(): string {
 export function getAlartContent(alartContent: any): string {
     const alartLength = alartContent.length;
     if (alartLength === 0) return "";
-    return alartLength === 1
-        ? alartContent[0].title
-        : alartContent[0].title + "等" + (alartLength - 1) + "项";
+    return alartLength === 1 ? alartContent[0].title : alartContent[0].title + "等" + (alartLength - 1) + "项";
 }
 
 export function isDaytimeNow(): boolean {
-    const hour = new Date().getHours();
+    const hour = (new Date().getUTCHours() + 8) % 24;
     return hour >= 6 && hour < 18;
 }
